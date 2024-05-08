@@ -11,7 +11,7 @@ export interface PriceConfiguration {
   };
 }
 
-export interface Attribute {
+export interface CategoryAttribute {
   name: string;
   widgetType: "switch" | "radio";
   defaultValue: string;
@@ -22,5 +22,22 @@ export type Category = {
   _id: string;
   name: string;
   priceConfiguration: PriceConfiguration;
-  attributes: Attribute[];
+  attributes: CategoryAttribute[];
 };
+
+export interface ProductAttribute {
+  name: string;
+  value: string | number;
+}
+
+export interface Product {
+  _id?: string;
+  name: string;
+  description: string;
+  image?: string;
+  tenantId: string;
+  categoryId: string;
+  isPublish?: boolean;
+  priceConfiguration: PriceConfiguration;
+  attributes: ProductAttribute[];
+}

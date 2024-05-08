@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ProductCard, { Product } from "./_components/product-card";
-import { Category } from "@/lib/types";
+import ProductCard from "./_components/product-card";
+import { Category, Product } from "@/lib/types";
 
-const products: Product[] = [
+const products = [
   {
     _id: "1",
     name: "Product 1",
@@ -58,6 +58,22 @@ export default async function Home() {
 
   const categories: Category[] = await categoryResponse.json();
 
+  // todo: add pagination and dynamic tenantId;
+  const productResponse = await fetch(
+    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&tenantId=10`,
+    {
+      next: {
+        revalidate: 3600, // 1 hour
+      },
+    }
+  );
+
+  if (!productResponse.ok) {
+    throw new Error("Failed to fetch products information");
+  }
+
+  const products: { data: Product[] } = await productResponse.json();
+
   return (
     <>
       {/* Hero Section */}
@@ -89,7 +105,7 @@ export default async function Home() {
       {/* Tab Section */}
       <section>
         <div className="container py-12">
-          <Tabs defaultValue="pizza">
+          <Tabs defaultValue={categories[0]._id}>
             <TabsList>
               {categories?.map((category) => {
                 return (
@@ -103,14 +119,21 @@ export default async function Home() {
                 );
               })}
             </TabsList>
-            <TabsContent value="pizza">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-                {products?.map((product) => {
-                  return <ProductCard key={product._id} product={product} />;
-                })}
-              </div>
-            </TabsContent>
-            <TabsContent value="beverages">Beverages list.</TabsContent>
+            {categories?.map((category) => {
+              return (
+                <TabsContent value={category._id} key={category._id}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+                    {products?.data
+                      .filter((product) => product.categoryId === category._id)
+                      .map((product) => {
+                        return (
+                          <ProductCard key={product._id} product={product} />
+                        );
+                      })}
+                  </div>
+                </TabsContent>
+              );
+            })}
           </Tabs>
         </div>
       </section>

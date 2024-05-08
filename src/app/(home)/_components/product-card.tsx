@@ -18,14 +18,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import Image from "next/image";
 import ToppingList from "./topping-list";
-
-export type Product = {
-  _id: string;
-  name: string;
-  description: string;
-  image: string;
-  price: number;
-};
+import { Product } from "@/lib/types";
 
 type PropType = { product: Product };
 
@@ -34,7 +27,7 @@ const ProductCard = ({ product }: PropType) => {
     <Card className="border-none rounded-xl">
       <CardHeader>
         <Image
-          src={product?.image}
+          src={product.image!}
           alt="image"
           width={150}
           height={150}
@@ -49,7 +42,7 @@ const ProductCard = ({ product }: PropType) => {
       <CardFooter className="flex justify-between items-center mt-4">
         <p className="space-x-2">
           <span>From</span>
-          <span className="font-bold">{product?.price}</span>
+          <span className="font-bold">{100}</span>
         </p>
 
         <Dialog>
