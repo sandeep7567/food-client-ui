@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductCard, { Product } from "./_components/product-card";
+import { Category } from "@/lib/types";
 
 const products: Product[] = [
   {
@@ -41,7 +42,22 @@ const products: Product[] = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const categoryResponse = await fetch(
+    `${process.env.BACKEND_URL}/api/catalog/categories?perPage=100`,
+    {
+      next: {
+        revalidate: 3600, // 1 hour
+      },
+    }
+  );
+
+  if (!categoryResponse.ok) {
+    throw new Error("Failed to fetch tenants information");
+  }
+
+  const categories: Category[] = await categoryResponse.json();
+
   return (
     <>
       {/* Hero Section */}
@@ -75,12 +91,17 @@ export default function Home() {
         <div className="container py-12">
           <Tabs defaultValue="pizza">
             <TabsList>
-              <TabsTrigger className="text-base" value="pizza">
-                Pizza
-              </TabsTrigger>
-              <TabsTrigger className="text-base" value="beverages">
-                Beverages
-              </TabsTrigger>
+              {categories?.map((category) => {
+                return (
+                  <TabsTrigger
+                    key={category?._id}
+                    value={category._id}
+                    className="text-base"
+                  >
+                    {category.name}
+                  </TabsTrigger>
+                );
+              })}
             </TabsList>
             <TabsContent value="pizza">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
