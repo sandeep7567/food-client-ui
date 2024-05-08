@@ -22,7 +22,7 @@ const ProductList = async () => {
 
   // todo: add pagination and dynamic tenantId;
   const productResponse = await fetch(
-    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&tenantId=10`,
+    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&tenantId=3`,
     {
       next: {
         revalidate: 3600, // 1 hour
@@ -58,7 +58,7 @@ const ProductList = async () => {
               <TabsContent value={category._id} key={category._id}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
                   {products?.data
-                    .filter((product) => product.categoryId === category._id)
+                    .filter((product) => product.category._id === category._id)
                     .map((product) => {
                       return (
                         <ProductCard key={product._id} product={product} />

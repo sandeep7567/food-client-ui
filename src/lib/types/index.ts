@@ -30,14 +30,14 @@ export interface ProductAttribute {
   value: string | number;
 }
 
-export interface Product {
-  _id?: string;
+export type Product = {
+  _id: string;
   name: string;
   description: string;
-  image?: string;
-  tenantId: string;
-  categoryId: string;
-  isPublish?: boolean;
+  isPublish: boolean;
+  image: string;
   priceConfiguration: PriceConfiguration;
   attributes: ProductAttribute[];
-}
+  category: Category;
+  createdAt: string;
+};
