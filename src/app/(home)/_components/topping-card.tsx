@@ -1,17 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Topping } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { CircleCheck } from "lucide-react";
 import Image from "next/image";
-
-export type Topping = {
-  _id: string;
-  name: string;
-  price: number;
-  image: string;
-  isAvailable: boolean;
-};
 
 type PropType = {
   topping: Topping;

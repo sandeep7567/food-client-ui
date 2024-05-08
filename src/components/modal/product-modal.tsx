@@ -1,11 +1,19 @@
+"use client";
+
 import Image from "next/image";
 import { Product } from "@/lib/types";
 import ToppingList from "@/app/(home)/_components/topping-list";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "../ui/button";
+import { ShoppingCart } from "lucide-react";
 
 const ProductModal = ({ product }: { product: Product }) => {
+  const handleAddToCart = () => {
+    console.log("add to cart");
+  };
+
   return (
     <Dialog>
       <DialogTrigger className="bg-primary/40 hover:bg-primary/30 text-primary font-semibold px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
@@ -25,7 +33,7 @@ const ProductModal = ({ product }: { product: Product }) => {
             <h3 className="text-xl font-bold ">{product?.name}</h3>
             <p className="mt-1">{product?.description}</p>
 
-            {Object.entries(product.category.priceConfiguration).map(
+            {Object.entries(product?.category.priceConfiguration).map(
               ([key, value]) => {
                 return (
                   <div key={key}>
@@ -59,6 +67,14 @@ const ProductModal = ({ product }: { product: Product }) => {
             )}
 
             <ToppingList />
+
+            <div className="flex justify-between items-center mt-12">
+              <span className="font-bold">400</span>
+              <Button onClick={handleAddToCart}>
+                <ShoppingCart size={20} />
+                <span className="ml-2">Add to cart</span>
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>
