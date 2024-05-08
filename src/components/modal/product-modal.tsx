@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "../ui/button";
 import { ShoppingCart } from "lucide-react";
+import { Suspense } from "react";
 
 const ProductModal = ({ product }: { product: Product }) => {
   const handleAddToCart = () => {
@@ -66,7 +67,13 @@ const ProductModal = ({ product }: { product: Product }) => {
               }
             )}
 
-            <ToppingList />
+            <Suspense
+              fallback={
+                <div className="w-20 h-20 border-t-2 border-l-2 border-primary animate-spin rounded-full my-4 mx-auto" />
+              }
+            >
+              <ToppingList />
+            </Suspense>
 
             <div className="flex justify-between items-center mt-12">
               <span className="font-bold">400</span>
