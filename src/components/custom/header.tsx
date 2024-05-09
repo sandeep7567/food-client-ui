@@ -1,5 +1,8 @@
-import Image from "next/image";
-import logo from "../../../public/logo.svg";
+import { Tenant } from "@/lib/types";
+import { Phone } from "lucide-react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { Button } from "../ui/button";
 import {
   Select,
   SelectContent,
@@ -7,11 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import Link from "next/link";
-import { Phone, ShoppingBasket } from "lucide-react";
-import { Button } from "../ui/button";
-import { Tenant } from "@/lib/types";
-import CartCounter from "./cart-counter";
+
+const CartCounterWithoutSSR = dynamic(() => import("./cart-counter"), {
+  ssr: false,
+});
 
 const Header = async () => {
   const tenantsResponse = await fetch(
@@ -84,7 +86,7 @@ const Header = async () => {
             </li>
           </ul>
 
-          <CartCounter />
+          <CartCounterWithoutSSR />
           <div className="flex items-center gap-x-2 ml-12">
             <Phone />
             <span>+91 1234 567 890</span>
