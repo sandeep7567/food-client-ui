@@ -4,10 +4,19 @@ export interface Tenant {
   address: string;
 }
 
-export interface PriceConfiguration {
+export interface CategoryPriceConfiguration {
   [key: string]: {
     priceType: "base" | "additional";
     availableOptions: string[];
+  };
+}
+
+export interface ProductPriceConfiguration {
+  [key: string]: {
+    priceType: "base" | "additional";
+    availableOptions: {
+      [key: string]: number;
+    };
   };
 }
 
@@ -21,7 +30,7 @@ export interface CategoryAttribute {
 export type Category = {
   _id: string;
   name: string;
-  priceConfiguration: PriceConfiguration;
+  priceConfiguration: CategoryPriceConfiguration;
   attributes: CategoryAttribute[];
 };
 
@@ -36,7 +45,7 @@ export type Product = {
   description: string;
   isPublish: boolean;
   image: string;
-  priceConfiguration: PriceConfiguration;
+  priceConfiguration: ProductPriceConfiguration;
   attributes: ProductAttribute[];
   category: Category;
   createdAt: string;

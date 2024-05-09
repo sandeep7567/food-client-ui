@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "../ui/button";
 import { ShoppingCart } from "lucide-react";
-import { startTransition, Suspense, useState } from "react";
+import { startTransition, Suspense, useMemo, useState } from "react";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { addToCart } from "@/lib/store/features/cart/cart-slice";
 
@@ -32,6 +32,24 @@ const ProductModal = ({ product }: { product: Product }) => {
   const [choosenConfig, setChoosenConfig] =
     useState<ChoosenConfig>(defaultConfig);
   const [selectedToppings, setSelectedToppings] = useState<Topping[]>([]);
+
+  const totalPrice = useMemo(() => {
+    const toppingsTotal = selectedToppings.reduce(
+      (acc, curr) => acc + curr.price,
+      0
+    );
+
+    const configPricing = Object.entries(choosenConfig).reduce(
+      (acc, [key, value]: [string, string]) => {
+        const price = product.priceConfiguration[key].availableOptions[value];
+
+        return acc + price;
+      },
+      0
+    );
+
+    return configPricing + toppingsTotal;
+  }, [choosenConfig, selectedToppings]);
 
   const handleCheckBoxCheck = (topping: Topping) => {
     const isAlreadyExist = selectedToppings.some(
@@ -140,7 +158,7 @@ const ProductModal = ({ product }: { product: Product }) => {
             </Suspense>
 
             <div className="flex justify-between items-center mt-12">
-              <span className="font-bold">400</span>
+              <span className="font-bold">Rs.{totalPrice}</span>
               <Button onClick={() => handleAddToCart(product)}>
                 <ShoppingCart size={20} />
                 <span className="ml-2">Add to cart</span>
