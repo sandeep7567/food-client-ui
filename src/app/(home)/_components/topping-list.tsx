@@ -1,8 +1,8 @@
 import { Topping } from "@/lib/types";
-import React, { startTransition, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ToppingCard from "./topping-card";
 
-const ToppingList = async ({
+const ToppingList = ({
   selectedToppings,
   handleCheckBoxCheck,
 }: {

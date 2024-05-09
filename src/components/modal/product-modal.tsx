@@ -9,13 +9,28 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "../ui/button";
 import { ShoppingCart } from "lucide-react";
 import { startTransition, Suspense, useState } from "react";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { addToCart } from "@/lib/store/features/cart/cart-slice";
 
 type ChoosenConfig = {
   [key: string]: string;
 };
 
 const ProductModal = ({ product }: { product: Product }) => {
-  const [choosenConfig, setChoosenConfig] = useState<ChoosenConfig>({});
+  const dispatch = useAppDispatch();
+
+  const defaultConfig: ChoosenConfig = Object.entries(
+    product.category.priceConfiguration
+  )
+    .map(([key, value]) => {
+      return { [key]: value.availableOptions[0] };
+    })
+    .reduce((acc, curr) => {
+      return { ...acc, ...curr };
+    }, {});
+
+  const [choosenConfig, setChoosenConfig] =
+    useState<ChoosenConfig>(defaultConfig);
   const [selectedToppings, setSelectedToppings] = useState<Topping[]>([]);
 
   const handleCheckBoxCheck = (topping: Topping) => {
@@ -35,8 +50,16 @@ const ProductModal = ({ product }: { product: Product }) => {
     });
   };
 
-  const handleAddToCart = () => {
-    console.log("add to cart");
+  const handleAddToCart = (product: Product) => {
+    const itemToAdd = {
+      product,
+      choosenConfiguration: {
+        priceConfiguration: choosenConfig,
+        selectedToppings,
+      },
+    };
+
+    dispatch(addToCart(itemToAdd));
   };
 
   const handleRadioChnage = (key: string, data: string) => {
@@ -118,7 +141,7 @@ const ProductModal = ({ product }: { product: Product }) => {
 
             <div className="flex justify-between items-center mt-12">
               <span className="font-bold">400</span>
-              <Button onClick={handleAddToCart}>
+              <Button onClick={() => handleAddToCart(product)}>
                 <ShoppingCart size={20} />
                 <span className="ml-2">Add to cart</span>
               </Button>
