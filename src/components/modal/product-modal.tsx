@@ -49,7 +49,7 @@ const ProductModal = ({ product }: { product: Product }) => {
     );
 
     return configPricing + toppingsTotal;
-  }, [choosenConfig, selectedToppings]);
+  }, [choosenConfig, selectedToppings, product.priceConfiguration]);
 
   const handleCheckBoxCheck = (topping: Topping) => {
     const isAlreadyExist = selectedToppings.some(
