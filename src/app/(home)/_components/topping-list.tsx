@@ -2,7 +2,13 @@ import { Topping } from "@/lib/types";
 import React, { startTransition, useEffect, useState } from "react";
 import ToppingCard from "./topping-card";
 
-const ToppingList = async () => {
+const ToppingList = async ({
+  selectedToppings,
+  handleCheckBoxCheck,
+}: {
+  selectedToppings: Topping[];
+  handleCheckBoxCheck: (topping: Topping) => void;
+}) => {
   const [toppings, setToppings] = useState<Topping[]>([]);
 
   useEffect(() => {
@@ -17,25 +23,6 @@ const ToppingList = async () => {
 
     fetchData();
   }, []);
-
-  const [selectedToppings, setSelectedToppings] = useState<Topping[]>([]);
-
-  const handleCheckBoxCheck = (topping: Topping) => {
-    const isAlreadyExist = selectedToppings.some(
-      (selectTopping) => selectTopping._id === topping._id
-    );
-
-    startTransition(() => {
-      if (isAlreadyExist) {
-        setSelectedToppings((prev: Topping[]) =>
-          prev.filter((selectTopping) => selectTopping._id !== topping._id)
-        );
-        return;
-      }
-
-      setSelectedToppings((prev: Topping[]) => [...prev, topping]);
-    });
-  };
 
   return (
     <section className="mt-6">

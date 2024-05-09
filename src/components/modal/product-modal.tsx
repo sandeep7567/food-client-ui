@@ -1,18 +1,53 @@
 "use client";
 
 import Image from "next/image";
-import { Product } from "@/lib/types";
+import { Product, Topping } from "@/lib/types";
 import ToppingList from "@/app/(home)/_components/topping-list";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "../ui/button";
 import { ShoppingCart } from "lucide-react";
-import { Suspense } from "react";
+import { startTransition, Suspense, useState } from "react";
+
+type ChoosenConfig = {
+  [key: string]: string;
+};
 
 const ProductModal = ({ product }: { product: Product }) => {
+  const [choosenConfig, setChoosenConfig] = useState<ChoosenConfig>({});
+  const [selectedToppings, setSelectedToppings] = useState<Topping[]>([]);
+
+  const handleCheckBoxCheck = (topping: Topping) => {
+    const isAlreadyExist = selectedToppings.some(
+      (selectTopping) => selectTopping._id === topping._id
+    );
+
+    startTransition(() => {
+      if (isAlreadyExist) {
+        setSelectedToppings((prev: Topping[]) =>
+          prev.filter((selectTopping) => selectTopping._id !== topping._id)
+        );
+        return;
+      }
+
+      setSelectedToppings((prev: Topping[]) => [...prev, topping]);
+    });
+  };
+
   const handleAddToCart = () => {
     console.log("add to cart");
+  };
+
+  const handleRadioChnage = (key: string, data: string) => {
+    startTransition(() => {
+      setChoosenConfig((prev) => {
+        return {
+          ...prev,
+          [key]: data,
+        };
+      });
+    });
   };
 
   return (
@@ -42,6 +77,9 @@ const ProductModal = ({ product }: { product: Product }) => {
                     <RadioGroup
                       defaultValue={value.availableOptions[0]}
                       className="grid grid-cols-3 gap-4 mt-2"
+                      onValueChange={(data) => {
+                        handleRadioChnage(key, data);
+                      }}
                     >
                       {value.availableOptions.map((option) => {
                         return (
@@ -72,7 +110,10 @@ const ProductModal = ({ product }: { product: Product }) => {
                 <div className="w-20 h-20 border-t-2 border-l-2 border-primary animate-spin rounded-full my-4 mx-auto" />
               }
             >
-              <ToppingList />
+              <ToppingList
+                selectedToppings={selectedToppings}
+                handleCheckBoxCheck={handleCheckBoxCheck}
+              />
             </Suspense>
 
             <div className="flex justify-between items-center mt-12">
