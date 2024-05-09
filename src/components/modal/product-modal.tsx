@@ -146,16 +146,19 @@ const ProductModal = ({ product }: { product: Product }) => {
               }
             )}
 
-            <Suspense
-              fallback={
-                <div className="w-20 h-20 border-t-2 border-l-2 border-primary animate-spin rounded-full my-4 mx-auto" />
-              }
-            >
-              <ToppingList
-                selectedToppings={selectedToppings}
-                handleCheckBoxCheck={handleCheckBoxCheck}
-              />
-            </Suspense>
+            {/* todo: make dynamic condition render ( Backend ) add isTopping: boolean to category modal in backend  */}
+            {product.category.name === "Pizza" && (
+              <Suspense
+                fallback={
+                  <div className="w-20 h-20 border-t-2 border-l-2 border-primary animate-spin rounded-full my-4 mx-auto" />
+                }
+              >
+                <ToppingList
+                  selectedToppings={selectedToppings}
+                  handleCheckBoxCheck={handleCheckBoxCheck}
+                />
+              </Suspense>
+            )}
 
             <div className="flex justify-between items-center mt-12">
               <span className="font-bold">Rs.{totalPrice}</span>
