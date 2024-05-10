@@ -19,32 +19,25 @@ const CartItems = () => {
   }, []);
 
   const totalAmount = useMemo(() => {
-    const totalProduct = cartItems
-      .map((item) => {
-        const toppingsTotal = item.choosenConfiguration.selectedToppings.reduce(
-          (acc, item) => {
-            return acc + item.price;
-          },
-          0
-        );
+    const totalProduct = cartItems.reduce((acc, item) => {
+      const toppingsTotal = item.choosenConfiguration.selectedToppings.reduce(
+        (acc, topping) => acc + topping.price,
+        0
+      );
 
-        const configPricing = Object.entries(item.priceConfiguration).reduce(
-          (acc, [key, { availableOptions }]) => {
-            const price =
-              availableOptions[
-                item.choosenConfiguration.priceConfiguration[key]
-              ];
+      const configPricing = Object.entries(item.priceConfiguration).reduce(
+        (acc, [key, { availableOptions }]) => {
+          const selectedOption =
+            item.choosenConfiguration.priceConfiguration[key];
+          const price = availableOptions[selectedOption];
 
-            return acc + (price ? price : 0);
-          },
-          0
-        );
+          return acc + (price || 0);
+        },
+        0
+      );
 
-        const totalPrice = (configPricing + toppingsTotal) * item.qty;
-
-        return totalPrice;
-      })
-      .reduce((acc, item) => acc + item, 0);
+      return acc + (configPricing + toppingsTotal) * item.qty;
+    }, 0);
 
     return totalProduct;
   }, [cartItems]);
