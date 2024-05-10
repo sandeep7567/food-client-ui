@@ -2,11 +2,42 @@
 
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/lib/store/hooks";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShoppingCart } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import CartItem from "./CartItem";
 
 const CartItems = () => {
+  const searchParams = useSearchParams();
+
+  const [isClient, setIsClient] = useState(false);
   const { cartItems } = useAppSelector((state) => state.cart);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
+
+  if (!cartItems.length) {
+    return (
+      <div className="flex items-center gap-2">
+        <ShoppingCart />
+        <p className="text-gray-500">
+          Your cart is empty!{" "}
+          <Link
+            className="text-orange-500"
+            href={`/?restaurantId=${searchParams.get("restaurantId")}`}
+          >
+            continue shopping?
+          </Link>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8">
