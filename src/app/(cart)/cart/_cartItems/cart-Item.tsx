@@ -63,7 +63,6 @@ const CartItem = ({ item }: ICartItem) => {
           </div>
         </div>
         <div className="flex items-center gap-4 justify-between">
-          <div>{item.qty}</div>
           <QtyChanger handleQtyChange={handleQtyChange}>{item.qty}</QtyChanger>
 
           <div className="flex">
