@@ -120,7 +120,13 @@ const ProductModal = ({ product }: { product: Product }) => {
   };
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog
+      open={isDialogOpen}
+      onOpenChange={() => {
+        setSelectedToppings([]);
+        setIsDialogOpen((prev) => !prev);
+      }}
+    >
       <DialogTrigger className="bg-primary/40 hover:bg-primary/30 text-primary font-semibold px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
         Choose
       </DialogTrigger>
