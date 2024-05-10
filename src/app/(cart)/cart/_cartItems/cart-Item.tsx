@@ -23,11 +23,14 @@ const CartItem = ({ item }: { item: CartItemProps }) => {
       0
     );
 
-    return toppingsTotal + configPricing;
+    const total = (toppingsTotal + configPricing) * item.qty;
+
+    return total;
   }, [
     item.choosenConfiguration.priceConfiguration,
     item.choosenConfiguration.selectedToppings,
     item.priceConfiguration,
+    item.qty,
   ]);
 
   const handleQtyChange = (value: number) => {
