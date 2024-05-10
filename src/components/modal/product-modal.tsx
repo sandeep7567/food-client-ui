@@ -18,6 +18,8 @@ type ChoosenConfig = {
 };
 
 const ProductModal = ({ product }: { product: Product }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const dispatch = useAppDispatch();
   const { cartItems } = useAppSelector((state) => state.cart);
 
@@ -102,6 +104,8 @@ const ProductModal = ({ product }: { product: Product }) => {
     };
 
     dispatch(addToCart(itemToAdd));
+
+    setIsDialogOpen(false);
   };
 
   const handleRadioChnage = (key: string, data: string) => {
@@ -116,7 +120,7 @@ const ProductModal = ({ product }: { product: Product }) => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger className="bg-primary/40 hover:bg-primary/30 text-primary font-semibold px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
         Choose
       </DialogTrigger>
