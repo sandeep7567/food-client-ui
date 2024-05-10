@@ -4,7 +4,11 @@ import Image from "next/image";
 import { useMemo } from "react";
 import QtyChanger from "./qty-changer";
 
-const CartItem = ({ item }: { item: CartItemProps }) => {
+interface ICartItem {
+  item: CartItemProps;
+}
+
+const CartItem = ({ item }: ICartItem) => {
   const totalPrice = useMemo(() => {
     const toppingsTotal = item.choosenConfiguration.selectedToppings.reduce(
       (acc, item) => {
