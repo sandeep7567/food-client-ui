@@ -1,7 +1,7 @@
 "use client";
 
 import { Tenant } from "@/lib/types";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -21,12 +21,13 @@ const TenantSelect = ({ resutrants }: { resutrants: { data: Tenant[] } }) => {
   };
 
   const defaultResutrantId = resutrants.data[0].id;
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (resutrants.data[0].id) {
+    if (pathname === "/" && resutrants.data[0].id) {
       router.push(`/?resutrantId=${defaultResutrantId}`);
     }
-  }, [defaultResutrantId, resutrants.data, router]);
+  }, [defaultResutrantId, resutrants.data, router, pathname]);
 
   return (
     <Select
