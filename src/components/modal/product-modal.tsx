@@ -7,17 +7,30 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "../ui/button";
-import { ShoppingCart } from "lucide-react";
+import { CircleCheck, ShoppingCart } from "lucide-react";
 import { startTransition, Suspense, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { addToCart, CartItem } from "@/lib/store/features/cart/cart-slice";
 import { hashTheItem } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
 
 type ChoosenConfig = {
   [key: string]: string;
 };
 
+export const SuccessToast = () => {
+  return (
+    <>
+      <div className="flex items-center gap-2">
+        <CircleCheck className="text-green-700" />
+        <span>Added to cart</span>
+      </div>
+    </>
+  );
+};
+
 const ProductModal = ({ product }: { product: Product }) => {
+  const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -106,6 +119,11 @@ const ProductModal = ({ product }: { product: Product }) => {
     dispatch(addToCart(itemToAdd));
     setSelectedToppings([]);
     setIsDialogOpen(false);
+
+    toast({
+      // @ts-ignore
+      title: <SuccessToast />,
+    });
   };
 
   const handleRadioChnage = (key: string, data: string) => {
