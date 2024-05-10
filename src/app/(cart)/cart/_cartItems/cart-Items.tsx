@@ -47,7 +47,7 @@ const CartItems = () => {
       .reduce((acc, item) => acc + item, 0);
 
     return totalProduct;
-  }, [cartItems]); // Dependency array contains 'cartItems'
+  }, [cartItems]);
 
   if (!isClient) {
     return null;
