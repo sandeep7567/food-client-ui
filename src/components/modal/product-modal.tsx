@@ -213,7 +213,7 @@ const ProductModal = ({ product }: { product: Product }) => {
             )}
 
             <div className="flex justify-between items-center mt-12">
-              <span className="font-bold">Rs.{totalPrice}</span>
+              <span className="font-bold">&#8377;{totalPrice}</span>
 
               <Button
                 disabled={alreadyHasInCart}
