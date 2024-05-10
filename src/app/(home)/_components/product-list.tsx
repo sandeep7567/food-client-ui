@@ -3,7 +3,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductCard from "./product-card";
 import { Category, Product } from "@/lib/types";
 
-const ProductList = async () => {
+const ProductList = async ({
+  searchParams,
+}: {
+  searchParams: { resutrantId: string };
+}) => {
+  const { resutrantId } = searchParams;
   // todo: do concurrent requests with Promise.all()
   const categoryResponse = await fetch(
     `${process.env.BACKEND_URL}/api/catalog/categories?perPage=100`,
@@ -22,7 +27,7 @@ const ProductList = async () => {
 
   // todo: add pagination and dynamic tenantId;
   const productResponse = await fetch(
-    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&tenantId=3`,
+    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&tenantId=${resutrantId}`,
     {
       next: {
         revalidate: 3600, // 1 hour

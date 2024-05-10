@@ -3,7 +3,11 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import ProductList from "./_components/product-list";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { resutrantId: string };
+}) {
   return (
     <>
       {/* Hero Section */}
@@ -39,7 +43,7 @@ export default async function Home() {
           <div className="w-20 h-20 border-t-2 border-l-2 border-primary animate-spin rounded-full my-4 mx-auto" />
         }
       >
-        <ProductList />
+        <ProductList searchParams={searchParams} />
       </Suspense>
     </>
   );
