@@ -2,6 +2,7 @@ import { CartItem as CartItemProps } from "@/lib/store/features/cart/cart-slice"
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useMemo } from "react";
+import QtyChanger from "./qty-changer";
 
 const CartItem = ({ item }: { item: CartItemProps }) => {
   const totalPrice = useMemo(() => {
@@ -29,6 +30,10 @@ const CartItem = ({ item }: { item: CartItemProps }) => {
     item.priceConfiguration,
   ]);
 
+  const handleQtyChange = (value: number) => {
+    console.log(value);
+  };
+
   return (
     <>
       <div className="grid grid-cols-2">
@@ -52,6 +57,7 @@ const CartItem = ({ item }: { item: CartItemProps }) => {
         </div>
         <div className="flex items-center gap-4 justify-between">
           <div>{item.qty}</div>
+          <QtyChanger handleQtyChange={handleQtyChange}>{item.qty}</QtyChanger>
 
           <div className="flex">
             <div className="font-bold w-12">&#8377;{totalPrice}</div>
