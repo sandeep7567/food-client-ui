@@ -5,7 +5,7 @@ import { useAppSelector } from "@/lib/store/hooks";
 import { ArrowRight, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CartItem from "./cart-Item";
 
 const CartItems = () => {
@@ -17,6 +17,37 @@ const CartItems = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const totalAmount = useMemo(() => {
+    const totalProduct = cartItems
+      .map((item) => {
+        const toppingsTotal = item.choosenConfiguration.selectedToppings.reduce(
+          (acc, item) => {
+            return acc + item.price;
+          },
+          0
+        );
+
+        const configPricing = Object.entries(item.priceConfiguration).reduce(
+          (acc, [key, { availableOptions }]) => {
+            const price =
+              availableOptions[
+                item.choosenConfiguration.priceConfiguration[key]
+              ];
+
+            return acc + (price ? price : 0);
+          },
+          0
+        );
+
+        const totalPrice = (configPricing + toppingsTotal) * item.qty;
+
+        return totalPrice;
+      })
+      .reduce((acc, item) => acc + item, 0);
+
+    return totalProduct;
+  }, [cartItems]); // Dependency array contains 'cartItems'
 
   if (!isClient) {
     return null;
@@ -45,7 +76,7 @@ const CartItems = () => {
         return <CartItem key={cartItem._id} item={cartItem} />;
       })}
       <div className="flex justify-between items-center">
-        <span className="font-bold text-xl">&#8377;{4000}</span>
+        <span className="font-bold text-xl">&#8377;{totalAmount}</span>
         <Button>
           Checkout
           <ArrowRight size={16} className="ml-2" />
