@@ -8,6 +8,8 @@ import {
 import ProductModal from "@/components/modal/product-modal";
 import { Product } from "@/lib/types";
 import Image from "next/image";
+import { useMemo } from "react";
+import { getFromPrice } from "@/lib/utils";
 
 type PropType = { product: Product };
 
@@ -31,7 +33,7 @@ const ProductCard = ({ product }: PropType) => {
       <CardFooter className="flex justify-between items-center mt-4">
         <p className="space-x-2">
           <span>From</span>
-          <span className="font-bold">{100}</span>
+          <span className="font-bold">Rs. {getFromPrice(product)}</span>
         </p>
 
         <ProductModal product={product} />
