@@ -1,4 +1,4 @@
-import CartItems from "./CartItems/CartItems";
+import CartItems from "./_cartItems/cart-Items";
 
 const Cart = () => {
   return (

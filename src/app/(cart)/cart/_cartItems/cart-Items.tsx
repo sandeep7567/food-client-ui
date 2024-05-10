@@ -6,7 +6,7 @@ import { ArrowRight, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import CartItem from "./CartItem";
+import CartItem from "./cart-Item";
 
 const CartItems = () => {
   const searchParams = useSearchParams();
