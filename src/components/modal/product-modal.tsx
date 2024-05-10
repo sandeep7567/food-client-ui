@@ -104,7 +104,7 @@ const ProductModal = ({ product }: { product: Product }) => {
     };
 
     dispatch(addToCart(itemToAdd));
-
+    setSelectedToppings([]);
     setIsDialogOpen(false);
   };
 
